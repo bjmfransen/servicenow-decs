@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>public</access>
+        <active>true</active>
+        <api_name>global.__AbstractAjaxProcessor</api_name>
+        <caller_access/>
+        <client_callable>true</client_callable>
+        <description/>
+        <name>__AbstractAjaxProcessor</name>
+        <script><![CDATA[var __AbstractAjaxProcessor = Class.create();
+__AbstractAjaxProcessor.prototype = Object.extendsObject(AbstractAjaxProcessor, {
+  getTypedParameter: function(name, type, nullsub){
+    /**
+     * Generic function reading an ajax parameter, converting it to the desired type
+     * and substituting any null values if necessary
+     * Types allowed are the primitives string, number, boolean, and the objects Date, GlideDate, GlideDateTime
+     * @param {string} name - name of the paramater to be retrieved
+     * @param {string} type - type to be returned.
+     * @returns {?} the retrieved value in the requested data type
+     */
+    // read the parameter. type at this point is String object
+    var value = this.getParameter(name);
+
+    // make sure type is a string literal; value defaults to string
+    type = ''+type || 'string';
+
+    switch (type){
+      case 'string':
+        // convert to string literal. if neither value nor default is provided, returns empty string
+        if (value === null){
+          return nullsub || '';
+        } else {
+          return ''+value;
+        }
+
+      case 'number':
+        // convert to number. if neither value nor default is provided, returns 0
+        if (value === null){
+          return nullsub || 0;
+        } else {
+          return +value;
+        }
+
+      case 'boolean':
+        // convert to boolean. if neither value nor default is provided, false
+        if (value === null){
+          return (typeof nullsub === 'boolean') ? nullsub : false;
+        } else {
+          return !!value;
+        }
+
+      case 'Date':
+        // convert to javascript Date object. if neither value nor default is provided, returns current Date
+        if (value === null){
+          return nullsub || new Date();
+        } else {
+          // Date accepts a number as argument in its constructor; force String object value to a number
+          return new Date(+value);
+        }
+			
+      case 'array':
+        // convert to array, provided value is a comma separated string
+        if (value === null){
+          return nullsub || [];
+        } else {
+          return (''+value).split(',');
+        }
+
+      case 'json':
+        if (value === null){
+          return nullsub || {}
+        } else {
+          return JSON.parse(''+value);
+        }
+
+      case 'GlideDate': break; //todo
+      case 'GlideDateTime': break; //todo
+    }
+  
+    return '';
+  }
+});]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2022-09-26 16:02:55</sys_created_on>
+        <sys_id>233ae3eb2f8a9910f0b8235df699b6bb</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>__AbstractAjaxProcessor</sys_name>
+        <sys_package display_value="DECS" source="bb52e72f2f869910f0b8235df699b60e">bb52e72f2f869910f0b8235df699b60e</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="DECS">bb52e72f2f869910f0b8235df699b60e</sys_scope>
+        <sys_update_name>sys_script_include_233ae3eb2f8a9910f0b8235df699b6bb</sys_update_name>
+        <sys_updated_by>falcon</sys_updated_by>
+        <sys_updated_on>2022-09-26 16:37:50</sys_updated_on>
+    </sys_script_include>
+</record_update>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>public</access>
+        <active>true</active>
+        <api_name>global.__CatalogDataUtils</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>__CatalogDataUtils</name>
+        <script><![CDATA[var __CatalogDataUtils = Class.create();
+__CatalogDataUtils.prototype = {
+    initialize: function(){},
+    
+    getReferencedRecord: function(catItemSysId, field, value, fields){
+        var table = this.getReferenceTable(catItemSysId, field);
+        var record = {};
+
+        if (typeof table != 'string' || table === '') return {};
+        if (typeof field != 'string' || field === '') return {};
+        if (!Array.isArray(fields) || fields.length === 0) return {};
+
+        var records = new __DataUtils().getRecordList(table, 'sys_id='+value, fields, 1);
+        if (records.length === 1) {
+            record = records[0];
+        }
+
+        return record;
+    },
+        
+    getReferenceTable: function(catItemSysId, variableName) {
+        // finds the reference table referred to by variableName
+        var result = '';
+        var grCatalogVariable = new GlideRecord('item_option_new');
+        var variableSetList = this.getVariableSetList(catItemSysId);
+
+        // the variable is either related directly to the catalog item itself, or through a variable set
+        grCatalogVariable.addQuery('cat_item', catItemSysId).addOrCondition('variable_set', 'IN', variableSetList);
+        grCatalogVariable.addQuery('name', variableName);
+        grCatalogVariable.setLimit(1);
+        grCatalogVariable.query();
+
+        if (grCatalogVariable.next()) {
+            result = grCatalogVariable.getValue('reference');
+        }
+
+        return result;
+    },
+
+    getVariableSetList: function(catItemSysId) {
+        // returns array with the sys_ids of the variable sets related to the catalog item
+        var result = [];
+        var grIoSetItem = new GlideRecord('io_set_item');
+        grIoSetItem.addQuery('sc_cat_item', catItemSysId);
+        grIoSetItem.query();
+
+        while (grIoSetItem.next()) {
+            result.push(grIoSetItem.getValue('variable_set'));
+        }
+
+        return result;
+    }
+}
+]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2022-09-26 16:05:17</sys_created_on>
+        <sys_id>4efa67af2f8a9910f0b8235df699b6b2</sys_id>
+        <sys_mod_count>3</sys_mod_count>
+        <sys_name>__CatalogDataUtils</sys_name>
+        <sys_package display_value="DECS" source="bb52e72f2f869910f0b8235df699b60e">bb52e72f2f869910f0b8235df699b60e</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="DECS">bb52e72f2f869910f0b8235df699b60e</sys_scope>
+        <sys_update_name>sys_script_include_4efa67af2f8a9910f0b8235df699b6b2</sys_update_name>
+        <sys_updated_by>falcon</sys_updated_by>
+        <sys_updated_on>2022-09-26 16:37:50</sys_updated_on>
+    </sys_script_include>
+</record_update>

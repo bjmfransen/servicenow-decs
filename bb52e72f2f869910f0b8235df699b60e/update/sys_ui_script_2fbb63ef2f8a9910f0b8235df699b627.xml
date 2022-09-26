@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_script">
+    <sys_ui_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <description/>
+        <global>false</global>
+        <name>catalog-form-data</name>
+        <script><![CDATA[(function () {
+	/**  catalog-form-data
+	 * Class to set fields that depend on a reference field on a catalog client form.
+	 * E.g. on selecting a user, you want to display its manager and email address. This library takes care of that for you
+	 * with a few simple calls.
+	 * 
+	 * @param {Object} g_form - g_form must be passed in
+	 * @returns {} - returns a promise with the retrieved data as its argument. 
+     * 
+	 * 
+	 * Example call:
+	 * g_ui_scripts.getUIScript('catalog-data-utils').then(function(response){
+	 *     response.formValues(g_form)
+	 *         .setReferenceVariable('ci')
+	 *         .mapFieldToVariable('ref_cmdb_ci_aws_account.object_id', 'object_id')
+	 *         .mapFieldToVariable('name', 'ci_name')
+	 *         .setFormValues()
+     * 
+	 * Note that the method supports dot walking - in some cases the fields are stored at a lower cmdb level than the query.
+	 *  
+	 */
+	var formValues = function (g_form) {
+		var data = {
+			map: {}
+		}
+
+		// set the reference variable - this reference leads to the record whose data we are interested in
+		var setReferenceVariable = function (referenceVariable) {
+			data.referenceVariable = referenceVariable;
+			return this;
+		}
+
+		// declare a field whose value we want to retrieve, and map it to the variable we want to store it in
+		// this method can be chained and called multiple times
+		var mapFieldToVariable = function (field, variable) {
+			data.map[variable] = field;
+			return this;
+		}
+
+		// retrieve the data
+		var setFormValues = function () {
+			var fieldNameList = Object.keys(data.map).map(function(key){ return data.map[key]})
+
+			var gaDUA = new GlideAjax('__DataUtilsAjax');
+			gaDUA.addParam('sysparm_name', 'getCatalogReference');
+			gaDUA.addParam('cat_item', g_form.getSysId());
+			gaDUA.addParam('field', data.referenceVariable);
+			gaDUA.addParam('value', g_form.getValue(data.referenceVariable));
+			gaDUA.addParam('fields', fieldNameList.join(','));
+
+			gaDUA.getXMLAnswer(function(response) {
+				var o = JSON.parse(response);
+				var variableName;
+
+				for (variableName in data.map) {
+					var fieldName = data.map[variableName];
+					g_form.setValue(variableName, o[fieldName].value, o[fieldName].display);
+				}
+			});
+		}
+
+		return {
+			setReferenceVariable: setReferenceVariable,
+			mapFieldToVariable: mapFieldToVariable,
+			setFormValues: setFormValues
+		}
+
+	}
+
+	return {
+		formValues: formValues
+	};
+})();
+
+
+]]></script>
+        <script_name/>
+        <sys_class_name>sys_ui_script</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2022-09-26 16:08:44</sys_created_on>
+        <sys_id>2fbb63ef2f8a9910f0b8235df699b627</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>catalog-form-data</sys_name>
+        <sys_package display_value="DECS" source="bb52e72f2f869910f0b8235df699b60e">bb52e72f2f869910f0b8235df699b60e</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="DECS">bb52e72f2f869910f0b8235df699b60e</sys_scope>
+        <sys_update_name>sys_ui_script_2fbb63ef2f8a9910f0b8235df699b627</sys_update_name>
+        <sys_updated_by>falcon</sys_updated_by>
+        <sys_updated_on>2022-09-26 16:36:18</sys_updated_on>
+        <ui_type>10</ui_type>
+        <use_scoped_format>false</use_scoped_format>
+    </sys_ui_script>
+</record_update>

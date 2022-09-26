@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>global.__DataUtilsAjax</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>__DataUtilsAjax</name>
+        <script><![CDATA[var __DataUtilsAjax = Class.create();
+__DataUtilsAjax.prototype = Object.extendsObject(__AbstractAjaxProcessor, {
+    getRecordList: function() {
+        // retrieves a number of records and returns them.
+        var table = this.getTypedParameter('table', 'string');
+        var query = this.getTypedParameter('query', 'string');
+        var fields = this.getTypedParameter('fields', 'array');
+        var max = this.getTypedParameter('max', 'number', -1);
+		
+        if (table !== '' && query !== '' && fields.length > 0) {
+			var data = new __DataUtils().getRecordList(table, query, fields, max);
+            return JSON.stringify(data);
+        }
+    },
+
+    getCatalogReference: function() {
+        var catItemSysId = this.getTypedParameter('cat_item', 'string'); // source table
+        var field = this.getTypedParameter('field', 'string'); // reference field
+        var value = this.getTypedParameter('value', 'string'); // reference field's value
+        var fields = this.getTypedParameter('fields', 'array'); // fields in the referenced records that need to be retrieved
+
+        var record = new __CatalogDataUtils().getReferencedRecord(catItemSysId, field, value, fields);
+        return JSON.stringify(record);
+
+    },
+
+
+    /////////////////
+
+
+
+
+    getMrvsVariableFromRitm: function() {
+
+        /**
+         * Retrieves multi row variables from already submitted requested items
+         * @param {string} ritm - sys_id of the requested item
+         * @param {string} mrvs - internal name of the mrvs
+         * @returns {object} - with the values that have been submitted with the mrvs
+         */
+
+        var ritm = this.getParameter('sysparm_ritm');
+        var mrvs = this.getParameter('sysparm_mrvs');
+        var grRitm = new GlideRecord('sc_req_item');
+
+        grRitm.get(ritm);
+
+        for (var prop in grRitm.variables) {
+            if (grRitm.variables.hasOwnProperty(prop) && prop == mrvs) {
+                var variable = grRitm.variables[prop];
+
+                return variable.toString();
+
+            }
+        }
+    },
+
+    getVariableFromRitm: function() {
+
+        /**
+         * Retrieves variables from already submitted requested items
+         * @param {string} ritm - sys_id of the requested item
+         * @param {array} fields - fields which values should be returned
+         * @returns {object} - with the question and the value
+         */
+
+        var ritm = this.getTypedParameter('sysparm_ritm', 'string');
+        var fields = this.getTypedParameter('sysparm_fields', 'array');
+        var data = getVariableValues(ritm, fields);
+
+        return JSON.stringify(data);
+
+    },
+
+
+    getFormReferenceTable: function(table, field) {
+        /**
+         * Determines which table is referenced from field in table
+         * @param {string} table - name of the table
+         * @param {string} field - name of the reference field in table
+         * @returns {string} - name of the table referenced by field. Returns an empty string if no reference table is found
+         */
+        var result = '';
+        var tables = getParentTables(table);
+        var grDictonary = new GlideRecord('sys_dictionary');
+        grDictonary.addQuery('name', 'IN', tables);
+        grDictonary.addQuery('element', field);
+        grDictonary.query();
+
+        if (grDictonary.next()) {
+            result = grDictonary.getValue('reference') || '';
+        }
+
+        return result;
+    },
+
+
+
+    getFormReference: function() {
+        var table = this.getTypedParameter('table', 'string'); // source table
+        var field = this.getTypedParameter('field', 'string'); // reference field
+        var value = this.getTypedParameter('value', 'string'); // reference field's value
+        var fields = this.getTypedParameter('fields', 'array'); // fields in the referenced records that need to be retrieved
+        var catalogItemId = this.getTypedParameter('catalogItemId', 'string'); // source catalog item sys_id
+
+
+        // determine the referenced table
+        // for catalog items (catalogItemId has a value and table does not) this happens
+        // based on the catalog item id and the variable name
+        // for the table-based forms (table has a value)
+        var refTable;
+        if (catalogItemId !== '') {
+            refTable = this.getReferenceTable(catalogItemId, field);
+        }
+
+        if (table !== '') {
+            refTable = this.getFormReferenceTable(table, field);
+        }
+
+        var data = {};
+        var records;
+        if (refTable !== '' && field !== '' && fields.length > 0) {
+            records = new bjDataUtils().getDataByClass(refTable, 'sys_id=' + value, fields, 1);
+            data = records[0];
+        }
+
+        return JSON.stringify(data);
+    },
+
+    insertRecord: function() {
+        var table = this.getTypedParameter('tablename', 'string'); // target table
+        gs.log('table = ' + table, 'BJF');
+        var values = this.getTypedParameter('values', 'json'); // json string containing field/value pairs
+        gs.log('values = ' + JSON.stringify(values), 'BJF');
+
+        return new bjDataUtils().insertRecord(table, values);
+    },
+
+    type: 'bjDataUtilsAjax'
+});
+
+
+function getVariableValues(ritmSysId, variables) {
+    var gr = new GlideRecord('sc_item_option_mtom');
+    gr.addQuery('request_item', ritmSysId);
+    gr.addQuery('sc_item_option.item_option_new.name', 'IN', variables);
+    gr.query();
+
+    var result = {};
+
+    while (gr.next()) {
+        result[gr.sc_item_option.item_option_new.name] = gr.sc_item_option.value.toString();
+
+    }
+
+    return result;
+}
+
+
+function getParentTables(table) {
+    var result = [table];
+    var grSysDbObject = new GlideRecord('sys_db_object');
+    if (grSysDbObject.get('name', table)) {
+        while ((grSysDbObject = grSysDbObject.super_class)) {
+            result.push(grSysDbObject.name);
+        }
+    }
+
+    return result;
+}
+
+
+function Logger() {
+    this.log = function(s) {
+        this.logs.push(s);
+        return this;
+    };
+
+    this.logVariable = function(variable, name) {
+        this.log('Variable:');
+        if (typeof name !== 'undefined') {
+            this.log('  Name = ' + name);
+            this.log('  Value = ' + variable);
+        }
+        var type = typeof variable;
+        this.log('  Type = ' + type);
+        if (type === 'object') {
+            var constructorName = variable.constructor.name;
+            if (constructorName) {
+                this.log('  object type = ' + constructorName);
+            }
+        }
+        return this;
+    };
+
+    this.print = function() {
+        gs.info(this.logs.join('\n'));
+    };
+
+    this.clear = function() {
+        this.logs = [];
+        return this;
+    };
+
+    this.clear();
+}]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2022-09-26 16:04:24</sys_created_on>
+        <sys_id>d1caef6f2f8a9910f0b8235df699b657</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>__DataUtilsAjax</sys_name>
+        <sys_package display_value="DECS" source="bb52e72f2f869910f0b8235df699b60e">bb52e72f2f869910f0b8235df699b60e</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="DECS">bb52e72f2f869910f0b8235df699b60e</sys_scope>
+        <sys_update_name>sys_script_include_d1caef6f2f8a9910f0b8235df699b657</sys_update_name>
+        <sys_updated_by>falcon</sys_updated_by>
+        <sys_updated_on>2022-09-26 16:37:51</sys_updated_on>
+    </sys_script_include>
+</record_update>

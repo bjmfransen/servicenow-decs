@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_script">
+    <sys_ui_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <description/>
+        <global>false</global>
+        <name>catalog-get-records</name>
+        <script><![CDATA[(function () {
+	/** catalog-get-records
+	 * Client promise encapsulates an AJAX call to the server retrieving data
+	 * @param {string} table - name of the table to be queried
+	 * @param {string} query - query to be performed
+	 * @param {string[]} fields - field names to be retrieved. Dotwalking is supported.
+	 * @param {number} max - maximum number of records. Defaults to -1 which means all records are retrieved
+
+	 *
+	 * @returns {} - returns a promise with the retrieved data as its argument. 
+     * 
+	 * 
+	 * Example call:
+	 * g_ui_scripts.getUIScript('catalog-get-data')
+	 * 	.then(function(response){
+	 * 		return response.getRecordList('sys_user_grmember', 'group=139181332f319110f0b8235df699b643', ['user'], -1);
+	 * 	})
+	 * 	.then(function(recordList){
+	 * 		console.log(recordList);
+	 * 	})
+     * 
+     * Sample recordList:
+	 *
+	 * [
+	 *     {
+	 *         "user": {
+	 *             "value": "572a9b801b24e810217080f4464bcb8c",
+	 *             "display": "Homer Simpson"
+	 *         },
+	 *         "sys_id ":{
+	 *         		"value": "49a3bc191b41103d6fceb186e4bcb28",
+	 *         		"display":"49a3bc191b411030d6fceb186e4bcb28"
+	 *         }
+	 *     }
+	 * ] 
+	 *  
+	 */
+	var getRecordList = function (table, query, fields, max) {
+		return new Promise(function (resolve, reject) {
+			var gaDUA = new GlideAjax('__DataUtilsAjax');
+			gaDUA.addParam('sysparm_name', 'getRecordList');
+			gaDUA.addParam('table', table);
+			gaDUA.addParam('query', query);
+			gaDUA.addParam('fields', fields.join(','));
+			gaDUA.addParam('max', max);
+
+			console.log('ajax call, parms', table, query, fields, max)
+			gaDUA.getXMLAnswer(function (response) {
+				console.log('ajax response', response)
+				var recordList = JSON.parse(response);
+				if (Array.isArray(recordList)) {
+					return resolve(recordList);
+				} else {
+					return reject('Failed');
+				}
+			});
+		});
+	};
+
+	var getRecordListValues = function(table, query, field, max){
+		return new Promise(function(resolve, reject){
+			getRecordList(table, query, [field], max)
+				.then(function(recordList){
+					var valueList = [];
+					var displayList = [];
+					recordList.forEach(function(record){
+						valueList.push(record[field].value);
+						displayList.push(record[field].display);
+					})
+					
+					resolve({
+						valueList: valueList,
+						displayList: displayList
+					});
+				})
+		})
+	}
+
+	return {
+		getRecordList: getRecordList,
+		getRecordListValues: getRecordListValues
+	};
+})();
+]]></script>
+        <script_name/>
+        <sys_class_name>sys_ui_script</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2022-09-26 16:07:52</sys_created_on>
+        <sys_id>2e8b6faf2f8a9910f0b8235df699b6f1</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>catalog-get-records</sys_name>
+        <sys_package display_value="DECS" source="bb52e72f2f869910f0b8235df699b60e">bb52e72f2f869910f0b8235df699b60e</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="DECS">bb52e72f2f869910f0b8235df699b60e</sys_scope>
+        <sys_update_name>sys_ui_script_2e8b6faf2f8a9910f0b8235df699b6f1</sys_update_name>
+        <sys_updated_by>falcon</sys_updated_by>
+        <sys_updated_on>2022-09-26 16:30:21</sys_updated_on>
+        <ui_type>10</ui_type>
+        <use_scoped_format>false</use_scoped_format>
+    </sys_ui_script>
+</record_update>
