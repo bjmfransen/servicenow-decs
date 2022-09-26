@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_sg_applet_launcher">
+    <sys_sg_applet_launcher action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <available_offline>false</available_offline>
+        <header_button/>
+        <header_titles/>
+        <hide_empty_sections>true</hide_empty_sections>
+        <name>DECS</name>
+        <required_roles>admin</required_roles>
+        <search_config/>
+        <sys_class_name>sys_sg_applet_launcher</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2022-09-26 15:29:57</sys_created_on>
+        <sys_id>3ae2af672f8a9910f0b8235df699b63f</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>DECS</sys_name>
+        <sys_package display_value="DECS" source="bb52e72f2f869910f0b8235df699b60e">bb52e72f2f869910f0b8235df699b60e</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="DECS">bb52e72f2f869910f0b8235df699b60e</sys_scope>
+        <sys_update_name>sys_sg_applet_launcher_3ae2af672f8a9910f0b8235df699b63f</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2022-09-26 15:29:57</sys_updated_on>
+        <title>DECS</title>
+    </sys_sg_applet_launcher>
+</record_update>

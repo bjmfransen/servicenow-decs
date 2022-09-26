@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_sg_action_param_map">
+    <sys_sg_action_param_map action="INSERT_OR_UPDATE">
+        <button display_value="Edit Button (Catalog Client Scripts)">17e2efe72f8a9910f0b8235df699b611</button>
+        <item_parameter display_value="Catalog Client Scripts isolate_script">dbe2efe72f8a9910f0b8235df699b60f</item_parameter>
+        <sys_class_name>sys_sg_action_param_map</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2022-09-26 15:29:59</sys_created_on>
+        <sys_id>13e2efe72f8a9910f0b8235df699b627</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>dbe2efe72f8a9910f0b8235df699b60f</sys_name>
+        <sys_package display_value="DECS" source="bb52e72f2f869910f0b8235df699b60e">bb52e72f2f869910f0b8235df699b60e</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="DECS">bb52e72f2f869910f0b8235df699b60e</sys_scope>
+        <sys_update_name>sys_sg_action_param_map_13e2efe72f8a9910f0b8235df699b627</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2022-09-26 15:29:59</sys_updated_on>
+        <ui_parameter display_value="Isolate script">d7e2efe72f8a9910f0b8235df699b625</ui_parameter>
+    </sys_sg_action_param_map>
+</record_update>

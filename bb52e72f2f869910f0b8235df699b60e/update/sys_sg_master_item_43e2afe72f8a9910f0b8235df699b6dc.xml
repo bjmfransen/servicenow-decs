@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_sg_master_item">
+    <sys_sg_master_item action="INSERT_OR_UPDATE">
+        <condition_order/>
+        <datasource_table>catalog_script_client</datasource_table>
+        <datasource_table_condition/>
+        <embedded_screen display_value="Catalog Client Scripts Form Screen">0fe2afe72f8a9910f0b8235df699b6d7</embedded_screen>
+        <item_view/>
+        <name>Catalog Client Scripts master_item</name>
+        <sys_class_name>sys_sg_master_item</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2022-09-26 15:29:58</sys_created_on>
+        <sys_id>43e2afe72f8a9910f0b8235df699b6dc</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Catalog Client Scripts master_item</sys_name>
+        <sys_package display_value="DECS" source="bb52e72f2f869910f0b8235df699b60e">bb52e72f2f869910f0b8235df699b60e</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="DECS">bb52e72f2f869910f0b8235df699b60e</sys_scope>
+        <sys_update_name>sys_sg_master_item_43e2afe72f8a9910f0b8235df699b6dc</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2022-09-26 15:29:58</sys_updated_on>
+        <use_view_config>true</use_view_config>
+        <view_config display_value="Catalog Client Scripts List Screen View Config">3ee2af672f8a9910f0b8235df699b643</view_config>
+    </sys_sg_master_item>
+</record_update>

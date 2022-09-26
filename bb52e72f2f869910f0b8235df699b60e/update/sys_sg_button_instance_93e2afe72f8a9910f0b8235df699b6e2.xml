@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_sg_button_instance">
+    <sys_sg_button_instance action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <button display_value="Delete Swipe (Catalog Client Scripts)">dbe2afe72f8a9910f0b8235df699b6df</button>
+        <color_theme>primary</color_theme>
+        <description/>
+        <field_name/>
+        <icon/>
+        <label>Delete</label>
+        <location>leading_swipe</location>
+        <name>Delete (Catalog Client Scripts)</name>
+        <order/>
+        <parent>43e2afe72f8a9910f0b8235df699b6dc</parent>
+        <parent_table>sys_sg_master_item</parent_table>
+        <sys_class_name>sys_sg_button_instance</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2022-09-26 15:29:58</sys_created_on>
+        <sys_id>93e2afe72f8a9910f0b8235df699b6e2</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Delete (Catalog Client Scripts)</sys_name>
+        <sys_package display_value="DECS" source="bb52e72f2f869910f0b8235df699b60e">bb52e72f2f869910f0b8235df699b60e</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="DECS">bb52e72f2f869910f0b8235df699b60e</sys_scope>
+        <sys_update_name>sys_sg_button_instance_93e2afe72f8a9910f0b8235df699b6e2</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2022-09-26 15:29:58</sys_updated_on>
+        <table/>
+    </sys_sg_button_instance>
+    <sys_translated_text action="delete_multiple" query="documentkey=93e2afe72f8a9910f0b8235df699b6e2"/>
+</record_update>
