@@ -9,7 +9,7 @@
         <name>__AbstractAjaxProcessor</name>
         <script><![CDATA[var __AbstractAjaxProcessor = Class.create();
 __AbstractAjaxProcessor.prototype = Object.extendsObject(AbstractAjaxProcessor, {
-  getTypedParameter: function(name, type, nullsub){
+  getTypedParameter: function (name, type, nullsub) {
     /**
      * Generic function reading an ajax parameter, converting it to the desired type
      * and substituting any null values if necessary
@@ -22,20 +22,20 @@ __AbstractAjaxProcessor.prototype = Object.extendsObject(AbstractAjaxProcessor, 
     var value = this.getParameter(name);
 
     // make sure type is a string literal; value defaults to string
-    type = ''+type || 'string';
+    type = '' + type || 'string';
 
-    switch (type){
+    switch (type) {
       case 'string':
         // convert to string literal. if neither value nor default is provided, returns empty string
-        if (value === null){
+        if (value === null) {
           return nullsub || '';
         } else {
-          return ''+value;
+          return '' + value;
         }
 
       case 'number':
         // convert to number. if neither value nor default is provided, returns 0
-        if (value === null){
+        if (value === null) {
           return nullsub || 0;
         } else {
           return +value;
@@ -43,7 +43,7 @@ __AbstractAjaxProcessor.prototype = Object.extendsObject(AbstractAjaxProcessor, 
 
       case 'boolean':
         // convert to boolean. if neither value nor default is provided, false
-        if (value === null){
+        if (value === null) {
           return (typeof nullsub === 'boolean') ? nullsub : false;
         } else {
           return !!value;
@@ -51,32 +51,32 @@ __AbstractAjaxProcessor.prototype = Object.extendsObject(AbstractAjaxProcessor, 
 
       case 'Date':
         // convert to javascript Date object. if neither value nor default is provided, returns current Date
-        if (value === null){
+        if (value === null) {
           return nullsub || new Date();
         } else {
           // Date accepts a number as argument in its constructor; force String object value to a number
           return new Date(+value);
         }
-			
+
       case 'array':
         // convert to array, provided value is a comma separated string
-        if (value === null){
+        if (value === null) {
           return nullsub || [];
         } else {
-          return (''+value).split(',');
+          return ('' + value).split(',');
         }
 
       case 'json':
-        if (value === null){
+        if (value === null) {
           return nullsub || {}
         } else {
-          return JSON.parse(''+value);
+          return JSON.parse('' + value);
         }
 
       case 'GlideDate': break; //todo
       case 'GlideDateTime': break; //todo
     }
-  
+
     return '';
   }
 });]]></script>
@@ -84,13 +84,13 @@ __AbstractAjaxProcessor.prototype = Object.extendsObject(AbstractAjaxProcessor, 
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2022-09-26 16:02:55</sys_created_on>
         <sys_id>233ae3eb2f8a9910f0b8235df699b6bb</sys_id>
-        <sys_mod_count>2</sys_mod_count>
+        <sys_mod_count>3</sys_mod_count>
         <sys_name>__AbstractAjaxProcessor</sys_name>
         <sys_package display_value="DECS" source="bb52e72f2f869910f0b8235df699b60e">bb52e72f2f869910f0b8235df699b60e</sys_package>
         <sys_policy/>
         <sys_scope display_value="DECS">bb52e72f2f869910f0b8235df699b60e</sys_scope>
         <sys_update_name>sys_script_include_233ae3eb2f8a9910f0b8235df699b6bb</sys_update_name>
         <sys_updated_by>falcon</sys_updated_by>
-        <sys_updated_on>2022-09-26 16:37:50</sys_updated_on>
+        <sys_updated_on>2022-09-27 10:14:59</sys_updated_on>
     </sys_script_include>
 </record_update>
